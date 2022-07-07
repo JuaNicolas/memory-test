@@ -1,10 +1,14 @@
 import { SingleCardProps } from "../models/single-card.interface";
 import "./SingleCard.scss";
 
-function SingleCard({ card, handleChoice, flipped }: SingleCardProps) {
-  console.log("CARD -> ", card);
+function SingleCard({
+  card,
+  handleChoice,
+  flipped,
+  disabled,
+}: SingleCardProps) {
   const handleClick = () => {
-    handleChoice(card);
+    !disabled && handleChoice(card);
   };
 
   return (

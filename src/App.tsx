@@ -20,10 +20,17 @@ function App() {
   const [turns, setTurns] = useState<number>(0);
   const [choiceOne, setChoiceOne] = useState<Choice | null>(null);
   const [choiceTwo, setChoiceTwo] = useState<Choice | null>(null);
+  const [disabled, setDisabled] = useState<boolean>(false);
+
+  // start a new game automatically
+  useEffect(() => {
+    shuffleCards();
+  }, []);
 
   // compare 2 selected cards
   useEffect(() => {
     if (choiceOne && choiceTwo) {
+      setDisabled(true);
       if (choiceOne.src === choiceTwo.src) {
         setCards((prevCards) =>
           prevCards.map((card) => {
@@ -34,12 +41,15 @@ function App() {
             }
           })
         );
+
         resetTurn();
       } else {
-        resetTurn();
+        setTimeout(() => {
+          resetTurn();
+        }, 500);
       }
     }
-  }, [choiceOne, choiceTwo]);
+  }, [choiceTwo]);
 
   // shuffle cards
   const shuffleCards = () => {
@@ -47,11 +57,14 @@ function App() {
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ id: uuidv4(), ...card }));
     setCards(shuffledCards);
-    setTurns(turns + 1);
+    setChoiceOne(null);
+    setChoiceTwo(null);
+    setTurns(0);
   };
 
   // handle a choice
   const handleChoice = (choice: Choice) => {
+    if (choice.id === choiceOne?.id) return;
     choiceOne ? setChoiceTwo(choice) : setChoiceOne(choice);
   };
 
@@ -60,6 +73,7 @@ function App() {
     setChoiceOne(null);
     setChoiceTwo(null);
     setTurns((prevTurns) => prevTurns + 1);
+    setDisabled(false);
   };
 
   return (
@@ -72,10 +86,12 @@ function App() {
             key={card.id}
             card={card}
             flipped={card === choiceOne || card === choiceTwo || card.matched}
+            disabled={disabled}
             handleChoice={handleChoice}
           />
         ))}
       </div>
+      <p>Turns: {turns}</p>
     </div>
   );
 }
