@@ -1,4 +1,4 @@
-import { SingleCardProps } from "../models/single-card.interface";
+import { SingleCardProps } from "../../models/single-card.interface";
 import "./SingleCard.scss";
 
 function SingleCard({
