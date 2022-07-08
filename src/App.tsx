@@ -3,8 +3,11 @@ import { Image } from "./models/image.interface";
 import { v4 as uuidv4 } from "uuid";
 import { useEffect, useState } from "react";
 import { Card } from "./models/card.interface";
-import SingleCard from "./components/SingleCard";
+
 import { Choice } from "./models/choice.interface";
+import SingleCard from "./components/SingleCard/SingleCard";
+import Highscores from "./components/Highscores/Highscores";
+import { BASE_MULTIPLIER } from "./utils/contants";
 
 const cardImages: Image[] = [
   { src: "/img/helmet-1.png", matched: false },
@@ -18,6 +21,9 @@ const cardImages: Image[] = [
 function App() {
   const [cards, setCards] = useState<Card[]>([]);
   const [turns, setTurns] = useState<number>(0);
+  const [userScore, setUserScore] = useState<number>(0);
+  const [scoreMultiplier, setScoreMultiplier] =
+    useState<number>(BASE_MULTIPLIER);
   const [choiceOne, setChoiceOne] = useState<Choice | null>(null);
   const [choiceTwo, setChoiceTwo] = useState<Choice | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
@@ -32,6 +38,10 @@ function App() {
     if (choiceOne && choiceTwo) {
       setDisabled(true);
       if (choiceOne.src === choiceTwo.src) {
+        setUserScore((prevScore) => prevScore + scoreMultiplier);
+        setScoreMultiplier(
+          (prevMultiplier) => prevMultiplier + BASE_MULTIPLIER
+        );
         setCards((prevCards) =>
           prevCards.map((card) => {
             if (card.src === choiceOne.src) {
@@ -45,6 +55,7 @@ function App() {
         resetTurn();
       } else {
         setTimeout(() => {
+          setScoreMultiplier(BASE_MULTIPLIER);
           resetTurn();
         }, 500);
       }
@@ -60,6 +71,8 @@ function App() {
     setChoiceOne(null);
     setChoiceTwo(null);
     setTurns(0);
+    setScoreMultiplier(BASE_MULTIPLIER);
+    setUserScore(0);
   };
 
   // handle a choice
@@ -79,7 +92,8 @@ function App() {
   return (
     <div className="App">
       <h1>Magic Match</h1>
-      <button onClick={shuffleCards}>New Game</button>
+
+      <Highscores scores={userScore} shuffleCards={shuffleCards} />
       <div className="card-grid">
         {cards.map((card) => (
           <SingleCard
