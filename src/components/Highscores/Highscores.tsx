@@ -1,6 +1,6 @@
 import { HighscoresProps } from "../../models/highscores.interface";
 import "./Highscores.scss";
-function Highscores({ scores, shuffleCards }: HighscoresProps) {
+function Highscores({ scores, shuffleCards, turns }: HighscoresProps) {
   const formatScore = () => {
     const scoresAsString = `${scores}`;
     const score = Array(5 - scoresAsString.length).fill(0);
@@ -12,9 +12,10 @@ function Highscores({ scores, shuffleCards }: HighscoresProps) {
   return (
     <div className="highscores-grid">
       <button onClick={shuffleCards}>New Game</button>
-      <p>
+      <p className="scores">
         Score <span>{formatScore()}</span>
       </p>
+      <p className="turns">Turns: {turns}</p>
     </div>
   );
 }

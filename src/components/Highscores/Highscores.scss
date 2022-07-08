@@ -14,13 +14,22 @@ button {
 
 .highscores-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 20px;
+  grid-template-columns: 1fr 2fr 1fr;
+  grid-gap: 2rem;
+
   p {
-    margin: 0;
-  }
-  span {
-    margin-left: 1rem;
-    letter-spacing: 0.3rem;
+    &.turns {
+      margin: 0;
+    }
+    &.scores {
+      margin: 0;
+      border: solid 2px gold;
+      border-radius: 4px;
+      padding: 0.2rem 0;
+    }
+    & span {
+      margin-left: 1rem;
+      letter-spacing: 0.3rem;
+    }
   }
 }

@@ -93,7 +93,11 @@ function App() {
     <div className="App">
       <h1>Magic Match</h1>
 
-      <Highscores scores={userScore} shuffleCards={shuffleCards} />
+      <Highscores
+        scores={userScore}
+        shuffleCards={shuffleCards}
+        turns={turns}
+      />
       <div className="card-grid">
         {cards.map((card) => (
           <SingleCard
@@ -105,7 +109,6 @@ function App() {
           />
         ))}
       </div>
-      <p>Turns: {turns}</p>
     </div>
   );
 }
