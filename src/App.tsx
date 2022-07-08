@@ -6,7 +6,7 @@ import { Card } from "./models/card.interface";
 
 import { Choice } from "./models/choice.interface";
 import SingleCard from "./components/SingleCard/SingleCard";
-import Highscores from "./components/Highscores/Highscores";
+import ScoreBoard from "./components/ScoreBoard/ScoreBoard";
 import { BASE_MULTIPLIER } from "./utils/contants";
 
 const cardImages: Image[] = [
@@ -93,7 +93,7 @@ function App() {
     <div className="App">
       <h1>Magic Match</h1>
 
-      <Highscores
+      <ScoreBoard
         scores={userScore}
         shuffleCards={shuffleCards}
         turns={turns}
