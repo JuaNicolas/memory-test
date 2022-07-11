@@ -8,6 +8,7 @@ import { Choice } from "./models/choice.interface";
 import SingleCard from "./components/SingleCard/SingleCard";
 import ScoreBoard from "./components/ScoreBoard/ScoreBoard";
 import { BASE_MULTIPLIER } from "./utils/contants";
+import Spinner from "./components/Spinner/Spinner";
 
 const cardImages: Image[] = [
   { src: "/img/helmet-1.png", matched: false },
@@ -28,6 +29,7 @@ function App() {
   const [choiceOne, setChoiceOne] = useState<Choice | null>(null);
   const [choiceTwo, setChoiceTwo] = useState<Choice | null>(null);
   const [disabled, setDisabled] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   // start a new game automatically
   useEffect(() => {
@@ -74,6 +76,7 @@ function App() {
 
   // shuffle cards
   const shuffleCards = (keepState = false) => {
+    setIsLoading(true);
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ id: uuidv4(), ...card }));
@@ -86,6 +89,9 @@ function App() {
     if (!keepState) {
       setLevel(1);
     }
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 1000);
   };
 
   // handle a choice
@@ -105,24 +111,28 @@ function App() {
   return (
     <div className="App">
       <h1>Magic Match</h1>
-
       <ScoreBoard
         scores={userScore}
         shuffleCards={shuffleCards}
         turns={turns}
         level={level}
       />
-      <div className="card-grid">
-        {cards.map((card) => (
-          <SingleCard
-            key={card.id}
-            card={card}
-            flipped={card === choiceOne || card === choiceTwo || card.matched}
-            disabled={disabled}
-            handleChoice={handleChoice}
-          />
-        ))}
-      </div>
+
+      {isLoading ? (
+        <Spinner />
+      ) : (
+        <div className="card-grid">
+          {cards.map((card) => (
+            <SingleCard
+              key={card.id}
+              card={card}
+              flipped={card === choiceOne || card === choiceTwo || card.matched}
+              disabled={disabled}
+              handleChoice={handleChoice}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
