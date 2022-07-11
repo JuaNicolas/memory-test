@@ -21,6 +21,7 @@ const cardImages: Image[] = [
 function App() {
   const [cards, setCards] = useState<Card[]>([]);
   const [turns, setTurns] = useState<number>(0);
+  const [level, setLevel] = useState<number>(1);
   const [userScore, setUserScore] = useState<number>(0);
   const [scoreMultiplier, setScoreMultiplier] =
     useState<number>(BASE_MULTIPLIER);
@@ -62,17 +63,29 @@ function App() {
     }
   }, [choiceTwo]);
 
+  // advance level
+  useEffect(() => {
+    const gameComplete = cards.length && cards.every((c) => c.matched);
+    if (gameComplete) {
+      shuffleCards(true);
+      setLevel((prevLevel) => prevLevel + 1);
+    }
+  }, [cards]);
+
   // shuffle cards
-  const shuffleCards = () => {
+  const shuffleCards = (keepState = false) => {
     const shuffledCards = [...cardImages, ...cardImages]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ id: uuidv4(), ...card }));
     setCards(shuffledCards);
     setChoiceOne(null);
     setChoiceTwo(null);
-    setTurns(0);
+    setTurns(keepState ? turns : 0);
+    setUserScore(keepState ? userScore : 0);
     setScoreMultiplier(BASE_MULTIPLIER);
-    setUserScore(0);
+    if (!keepState) {
+      setLevel(1);
+    }
   };
 
   // handle a choice
@@ -97,6 +110,7 @@ function App() {
         scores={userScore}
         shuffleCards={shuffleCards}
         turns={turns}
+        level={level}
       />
       <div className="card-grid">
         {cards.map((card) => (

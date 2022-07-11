@@ -1,5 +1,6 @@
 export interface ScoreBoardProps {
   scores: number;
   turns: number;
-  shuffleCards: () => void;
+  level: number;
+  shuffleCards: (keepState: boolean) => void;
 }

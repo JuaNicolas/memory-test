@@ -9,16 +9,17 @@ const formatScore = (scores: number): number[] => {
   return score;
 };
 
-function ScoreBoard({ scores, shuffleCards, turns }: ScoreBoardProps) {
+function ScoreBoard({ scores, shuffleCards, turns, level }: ScoreBoardProps) {
   const formattedScore = formatScore(scores);
 
   return (
     <div className="highscores-grid">
-      <button onClick={shuffleCards}>New Game</button>
+      <button onClick={() => shuffleCards(false)}>New Game</button>
+      <p className="level">Level: {level}</p>
+      <p className="turns">Turns: {turns}</p>
       <p className="scores">
         Score <span>{formattedScore}</span>
       </p>
-      <p className="turns">Turns: {turns}</p>
     </div>
   );
 }
